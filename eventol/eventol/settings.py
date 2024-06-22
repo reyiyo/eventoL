@@ -8,7 +8,7 @@ import socket
 
 import raven
 from configurations import Configuration
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from easy_thumbnails.conf import Settings as thumbnail_settings
 from easy_thumbnails.optimize.conf import OptimizeSettings
 
@@ -62,11 +62,9 @@ class Base(Configuration):
         'django.contrib.postgres',
         'django_filters',
         'rest_framework',
-        'channels',
         'django_extensions',
         'vote',
         'tempus_dominus',
-        'forms_builder.forms',
     )
 
     MIDDLEWARE = (
@@ -75,6 +73,7 @@ class Base(Configuration):
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'allauth.account.middleware.AccountMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
         'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -278,6 +277,8 @@ class Base(Configuration):
     PRIVATE_ACTIVITIES = os.environ.get("PRIVATE_ACTIVITIES", True)
     TEMPUS_DOMINUS_LOCALIZE = True
     TEMPUS_DOMINUS_INCLUDE_ASSETS = True
+
+    DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 class Staging(Base):

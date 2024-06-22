@@ -4,10 +4,9 @@ from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.utils.decorators import available_attrs
 
 from manager.constants import (
     ADD_ATTENDEE_PERMISSION_CODE_NAME, ADD_ATTENDEE_PERMISSION_NAME,
@@ -128,7 +127,7 @@ def are_activities_public(user, event_slug=None):
     if not settings.PRIVATE_ACTIVITIES:
         return True
 
-    if user.is_authenticated():
+    if user.is_authenticated:
         return is_reviewer(user, event_slug=event_slug)
 
     raise PermissionDenied(
@@ -143,7 +142,8 @@ def is_activity_public():
     If activities are private only will return true for collaborator users or activity owner
     """
     def decorator(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
+        @wraps(view_func)
+
         def _wrapped_view(request, *args, **kwargs):
             activity_id = kwargs['activity_id']
             user = request.user
@@ -154,7 +154,7 @@ def is_activity_public():
                     activity.status == "2",  # Accepted
                     not settings.PRIVATE_ACTIVITIES,
                     activity.owner.user == user,
-                    user.is_authenticated() and is_reviewer(user, event_slug=event_slug)
+                    user.is_authenticated and is_reviewer(user, event_slug=event_slug)
             ]):
                 return view_func(request, *args, **kwargs)
             raise PermissionDenied(
@@ -174,7 +174,7 @@ def user_passes_test(test_func, name_redirect):
     """
 
     def decorator(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
+        @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
             if 'event_slug' in kwargs.keys():
                 event_slug = kwargs['event_slug']

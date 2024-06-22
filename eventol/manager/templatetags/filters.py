@@ -3,7 +3,7 @@ import json
 from allauth.socialaccount import providers
 from allauth.socialaccount.models import SocialApp
 from django import forms, template
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext as _
 from vote.models import Vote
 
 from manager.constants import (
@@ -218,7 +218,7 @@ def get_active_providers():
     Then within the template context, `socialaccount_providers` will hold
     a list of social providers configured for the current site.
     """
-    installed_providers = providers.registry.get_list()
+    installed_providers = providers.registry.get_class_list()
     active_providers = []
     for provider in installed_providers:
         if SocialApp.objects.filter(provider=provider.id, sites__isnull=False).exists():
