@@ -13,8 +13,6 @@ from .api import (EventViewSet, EventUserViewSet, InstallerViewSet,
                   SoftwareViewSet, HardwareViewSet, EventTagSet,
                   ActivityTypeViewSet)
 
-import forms_builder.forms.urls
-
 
 # Routers provide a way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -42,8 +40,7 @@ urlpatterns = [
     url(r'^create-event/$', views.create_event, name="create_event"),
     url(r'^events/', include('manager.urls.events'), name='events'),
     url(r'^tags/', include('manager.urls.event_tags'), name='event_tags'),
-    url(r'^admin/', include(admin.site.urls), name='admin'),
-    url(r'^forms/', include(forms_builder.forms.urls)),
+    url(r'^admin/', admin.site.urls, name='admin'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls'), name='ckeditor'),
     url(r'^accounts/profile/',
         TemplateView.as_view(template_name='account/profile.html'),
